@@ -1,0 +1,22 @@
+{
+    "name": "TBHR1_Library",
+    "keywords": "TTGO, T-Beam",
+    "description": "Arduino library for TTGO T-Beam Hardware Revision 1",
+    "homepage": "https://github.com/luckynrslevin/TBHR1_Library",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/luckynrslevin/TBHR1_Library.git"
+    },
+    "version": "1.0.0.0",
+    "authors": {
+      "name": "luckynrslevin",
+      "url": "https://github.com/luckynrslevin/TBHR1_Library"
+    },
+    "exclude": [
+      ".github",
+      "extras"
+    ],
+    "frameworks": "arduino",
+    "platforms": "esp32"
+  }
+  
