@@ -1,0 +1,35 @@
+#######################################
+# Syntax Coloring Map For TBHR1 Library
+# github:https://github.com/luckynrslevin/TBHR1_Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+tbhr1_Class	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+init  KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+LORA_SCK LITERAL1
+LORA_MISO LITERAL1
+LORA_MOSI LITERAL1
+LORA_SS LITERAL1
+LORA_DI0 LITERAL1
+LORA_RST LITERAL1
+GPS_RX_PIN LITERAL1
+GPS_TX_PIN LITERAL1
+I2C_SDA LITERAL1
+I2C_SCL LITERAL1
+PMU_IRQ LITERAL1
+USER_BUTTON LITERAL1
