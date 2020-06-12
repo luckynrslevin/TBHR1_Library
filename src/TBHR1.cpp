@@ -1,4 +1,4 @@
-#include "t_beam_rev1.h"
+#include "tbhr1.h"
 
 #include <Wire.h>
 #include <axp20x.h>
@@ -39,7 +39,7 @@ void scanI2Cdevice(void)
         Serial.println("done\n");
 }
 
-void tbrev1_Class::init()
+void tbhr1_Class::init()
 { 
     Wire.begin(I2C_SDA, I2C_SCL);
     scanI2Cdevice();
