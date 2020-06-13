@@ -58,10 +58,5 @@ public:
    */
    int setOnboardLedStatus(tbhr1_onboard_led_status_t param);
 private:
-   /**
-   * Check if AXP192 is available on I2C bus
-   * @return true in case found, else false.
-   */
-   bool scanI2CforAxp192(void);
    
 };

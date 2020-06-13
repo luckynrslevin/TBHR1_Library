@@ -5,24 +5,12 @@
 
 AXP20X_Class axp;
 
-//bool axp192_found = false;
-
-bool scanI2CforAxp192(void)
-{
-    byte err;
-    Wire.beginTransmission(AXP192_SLAVE_ADDRESS);
-    err = Wire.endTransmission();
-    if (err == 0) {
-        return true;
-    }
-    return false;
-}
-
 int tbhr1_Class::init()
 {
     int retValue = TBHR1_PASS;
     Wire.begin(I2C_SDA, I2C_SCL);
-    if (scanI2CforAxp192()) {
+    Wire.beginTransmission(AXP192_SLAVE_ADDRESS);
+    if (Wire.endTransmission() == 0) {
         if (!axp.begin(Wire, AXP192_SLAVE_ADDRESS)) {
             // power on everything
             if (axp.setPowerOutPut(AXP192_LDO2, AXP202_ON) != AXP_PASS)
