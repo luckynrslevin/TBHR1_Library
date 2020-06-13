@@ -33,8 +33,13 @@ public:
    void init();
 
    /**
-     * param:   tbhr1_onboard_led_status_t
-     */
-   void setLed(int param);
+   * Set status of onboard led, use one of the following parameters
+   * - TBHR1_LED_OFF
+   * - BHR1_LED_ON
+   * - TBHR1_LED_BLINK_1HZ
+   * - TBHR1_LED_BLINK_4HZ
+   * param:   tbhr1_onboard_led_status_t
+   */
+   void setLed(uint8_t param);
 private:
 };
