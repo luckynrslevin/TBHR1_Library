@@ -57,8 +57,8 @@ void tbhr1_Class::init()
             axp.setDCDC1Voltage(3300); //Set Pin header 3.3V line to 3.3V. Processor is happy down to 1.8V which saves power
             
             // Set mode of blue onboard LED (OFF, ON, Blinking 1Hz, Blinking 4 Hz)
-            // axp.setChgLEDMode(AXP20X_LED_OFF);
-            //axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+            // 
+            //
             axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ);
             //axp.setChgLEDMode(AXP20X_LED_BLINK_4HZ);
         } else {
@@ -66,5 +66,26 @@ void tbhr1_Class::init()
         }
     } else {
         //Serial.println("AXP192 not found");
+    }
+}
+
+setLed(uint8_t param)
+{
+    switch(param) {
+        case TBHR1_LED_OFF:
+        axp.setChgLEDMode(AXP20X_LED_OFF);
+        break;
+        case TBHR1_LED_BLINK_1HZ:
+        axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ);
+        break;
+        case TBHR1_LED_BLINK_4HZ:
+        axp.setChgLEDMode(AXP20X_LED_BLINK_4HZ);
+        break;
+        case TBHR1_LED_ON:
+        axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+        break;
+        default:
+        axp.setChgLEDMode(AXP20X_LED_OFF);
+        break;
     }
 }

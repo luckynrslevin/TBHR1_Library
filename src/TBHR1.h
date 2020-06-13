@@ -18,9 +18,23 @@
 #define PMU_IRQ 35
 #define USER_BUTTON 36
 
+typedef enum {
+    TBHR1_LED_OFF,
+    TBHR1_LED_ON,
+    TBHR1_LED_BLINK_1HZ,
+    TBHR1_LED_BLINK_4HZ
+} tbhr1_onboard_led_status_t;
+
+typedef uint8_t (*axp_com_fptr_t)(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint8_t len);
+
 class tbhr1_Class
 {
 public:
    void init();
+
+   /**
+     * param:   tbhr1_onboard_led_status_t
+     */
+   void setLed(int param);
 private:
 };
