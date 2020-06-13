@@ -5,87 +5,72 @@
 
 AXP20X_Class axp;
 
-bool axp192_found = false;
+//bool axp192_found = false;
 
-void scanI2Cdevice(void)
+bool scanI2CforAxp192(void)
 {
-    byte err, addr;
-    int nDevices = 0;
-    for (addr = 1; addr < 127; addr++) {
-        Wire.beginTransmission(addr);
-        err = Wire.endTransmission();
-        if (err == 0) {
-            Serial.print("I2C device found at address 0x");
-            if (addr < 16)
-                Serial.print("0");
-            Serial.print(addr, HEX);
-            Serial.println(" !");
-            nDevices++;
-
-            if (addr == AXP192_SLAVE_ADDRESS) {
-                axp192_found = true;
-                Serial.println("axp192 PMU found");
-            }
-        } else if (err == 4) {
-            Serial.print("Unknow error at address 0x");
-            if (addr < 16)
-                Serial.print("0");
-            Serial.println(addr, HEX);
-        }
+    byte err;
+    Wire.beginTransmission(AXP192_SLAVE_ADDRESS);
+    err = Wire.endTransmission();
+    if (err == 0) {
+        return true;
     }
-    if (nDevices == 0)
-        Serial.println("No I2C devices found\n");
-    else
-        Serial.println("done\n");
+    return false;
 }
 
-void tbhr1_Class::init()
-{ 
+int tbhr1_Class::init()
+{
+    int retValue = TBHR1_PASS;
     Wire.begin(I2C_SDA, I2C_SCL);
-    scanI2Cdevice();
-    if (axp192_found) {
+    if (scanI2CforAxp192()) {
         if (!axp.begin(Wire, AXP192_SLAVE_ADDRESS)) {
-            //Serial.println("AXP192 Begin PASS");
-            // power on device
-            //axp.setPowerOutPut(AXP192_LDO2, AXP202_ON);
-            //axp.setPowerOutPut(AXP192_LDO3, AXP202_ON);
-            //axp.setPowerOutPut(AXP192_DCDC1, AXP202_ON);
-            //axp.setPowerOutPut(AXP192_DCDC2, AXP202_ON);
-            //axp.setPowerOutPut(AXP192_DCDC3, AXP202_ON);
-            //axp.setPowerOutPut(AXP192_EXTEN, AXP202_ON);
-            // this one seems to be enough to make the led work.
-            axp.setDCDC1Voltage(3300); //Set Pin header 3.3V line to 3.3V. Processor is happy down to 1.8V which saves power
-            
+            // power on everything
+            if (axp.setPowerOutPut(AXP192_LDO2, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setPowerOutPut(AXP192_LDO3, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setPowerOutPut(AXP192_DCDC1, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setPowerOutPut(AXP192_DCDC2, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setPowerOutPut(AXP192_DCDC3, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setPowerOutPut(AXP192_EXTEN, AXP202_ON) != AXP_PASS)
+                retValue = TBHR1_FAIL;
+            if (axp.setDCDC1Voltage(3300) != AXP_PASS)
+                retValue = TBHR1_FAIL; //Set Pin header 3.3V line to 3.3V. Processor is happy down to 1.8V which saves power
             // Set mode of blue onboard LED (OFF, ON, Blinking 1Hz, Blinking 4 Hz)
-            // 
-            //
-            axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ);
-            //axp.setChgLEDMode(AXP20X_LED_BLINK_4HZ);
-        } else {
-            //Serial.println("AXP192 Begin FAIL");
+            if (axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ) != AXP_PASS)
+                retValue = TBHR1_FAIL;
         }
     } else {
-        //Serial.println("AXP192 not found");
+        retValue = TBHR1_FAIL;
     }
+    return retValue;
 }
 
-setLed(uint8_t param)
+int tbhr1_Class::setOnboardLedStatus(tbhr1_onboard_led_status_t param)
 {
     switch(param) {
         case TBHR1_LED_OFF:
-        axp.setChgLEDMode(AXP20X_LED_OFF);
+        if (axp.setChgLEDMode(AXP20X_LED_OFF) != AXP_PASS)
+            return TBHR1_FAIL;
         break;
         case TBHR1_LED_BLINK_1HZ:
-        axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ);
+        if (axp.setChgLEDMode(AXP20X_LED_BLINK_1HZ) != AXP_PASS)
+            return TBHR1_FAIL;
         break;
         case TBHR1_LED_BLINK_4HZ:
-        axp.setChgLEDMode(AXP20X_LED_BLINK_4HZ);
+        if (axp.setChgLEDMode(AXP20X_LED_BLINK_4HZ) != AXP_PASS)
+            return TBHR1_FAIL;
         break;
         case TBHR1_LED_ON:
-        axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+        if (axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL) != AXP_PASS)
+            return TBHR1_FAIL;
         break;
         default:
-        axp.setChgLEDMode(AXP20X_LED_OFF);
+            return TBHR1_ARG_INVALID;
         break;
     }
+    return TBHR1_PASS;
 }
